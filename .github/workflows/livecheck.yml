@@ -1,0 +1,44 @@
+name: Weekly version check
+
+on:
+  schedule:
+    # Mondays 05:00 UTC: 06:00 in Zurich in winter, 07:00 in summer.
+    - cron: 0 5 * * 1
+  workflow_dispatch:
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash -xeuo pipefail {0}
+
+jobs:
+  livecheck:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/homebrew/brew:main # zizmor: ignore[unpinned-images]
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - name: Set up Homebrew
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@c262868c096d909fc278daa87ed9772967331ea3 # 2026.11.02.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Trust this tap
+        env:
+          TAP_NAME: ${{ steps.set-up-homebrew.outputs.tap-name }}
+        run: |
+          brew developer on
+          brew trust "$TAP_NAME"
+
+      - name: Check for new versions
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: 1
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAP_NAME: ${{ steps.set-up-homebrew.outputs.tap-name }}
+        run: |
+          export TAP="$TAP_NAME"
+          REPORT="$GITHUB_STEP_SUMMARY" bash "$(brew --repository "$TAP_NAME")/.github/livecheck-report.sh"
