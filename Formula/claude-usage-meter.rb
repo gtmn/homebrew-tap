@@ -11,6 +11,8 @@ class ClaudeUsageMeter < Formula
   depends_on macos: :sonoma
 
   def install
+    # The app reports this version (build.sh 0.1.3 and later; earlier ones ignore it).
+    ENV["USAGE_METER_VERSION"] = version.to_s unless build.head?
     system "MenuBar/build.sh"
     prefix.install "MenuBar/build/UsageMeter.app"
 
