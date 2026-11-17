@@ -1,8 +1,8 @@
 class ClaudeUsageMeter < Formula
   desc "Menu bar meter for Claude Code session, weekly and Enterprise budget limits"
   homepage "https://github.com/gtmn/claude-usage-meter"
-  url "https://github.com/gtmn/claude-usage-meter/archive/refs/tags/v0.1.10.tar.gz"
-  sha256 "5ae3abcbef281898da579bd42072e3e4c335e27e6b9b4edeedd128e28e2a2d00"
+  url "https://github.com/gtmn/claude-usage-meter/archive/refs/tags/v0.1.11.tar.gz"
+  sha256 "4787faa48576274c3c2437bc7718717630209e4fa3a80ff8dd332340184043d0"
   license "MIT"
   head "https://github.com/gtmn/claude-usage-meter.git", branch: "main"
 
